@@ -7,6 +7,8 @@ package repositorio;
 import java.util.ArrayList;
 import java.util.List;
 import modelo.Producto;
+import java.util.HashSet;
+import java.util.Set;
 
 public class ProductoRepositorio {
     // Lista privada llamada listaProductos, que solo puede guardar objetos Producto
@@ -14,8 +16,12 @@ public class ProductoRepositorio {
     
     private List<Producto> listaProductos = new ArrayList<>();
     
+    // Guarda los codigos y no permite duplicados
+    private Set<String> codigosProductos = new HashSet<>();
+    
     public void agregar(Producto producto) { // Este método recibe un producto y lo agrega a la lista de productos
         listaProductos.add(producto);  // void no devuelve nada, realiza la accion de agregar el producto
+        codigosProductos.add(producto.getCodigo().toLowerCase());
     }
     
     public List<Producto> listar() { // no se usa void porque el metodo si devuelve algo
@@ -34,7 +40,7 @@ public class ProductoRepositorio {
     } 
     
     public boolean existeCodigo(String codigo) {
-        return buscarPorCodigo(codigo) != null; // devuelve verdadero si buscarPorCodigo no devuelve null
+        return codigosProductos.contains(codigo.toLowerCase()); // si el codigo existe devuelve true
     }
     
     public void eliminar (String codigo) {
@@ -42,10 +48,11 @@ public class ProductoRepositorio {
 
         if(producto != null) {
             listaProductos.remove(producto);
+            codigosProductos.remove(producto.getCodigo().toLowerCase());
         }
     }
     
-    public void editar( Producto productoActualizado) {
+    public void editar(Producto productoActualizado) {
         for (int i = 0; i < listaProductos.size(); i++) { // recorre la lista
             if (listaProductos.get(i).getCodigo().equalsIgnoreCase(productoActualizado.getCodigo())) {
                 listaProductos.set(i, productoActualizado); // reemplazar el valor de la posicion i por el nuevo
@@ -66,7 +73,7 @@ public class ProductoRepositorio {
         }
         return resultados; // devuelve la lista con los resultados encontrados.
     }
-    // recibe una categoria y develve los productos que pertenecen a ella
+    // Recibe una categoria y develve los productos que pertenecen a ella
     public List<Producto> filtrarPorCategoria(String categoria) {
         List<Producto> resultados = new ArrayList<>();
         
