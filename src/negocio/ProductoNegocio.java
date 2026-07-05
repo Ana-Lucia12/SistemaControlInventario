@@ -19,21 +19,7 @@ public class ProductoNegocio {
 // Negocio usa el repositorio para guardar, listar, buscar, editar y eliminar productos.
     
     private ProductoRepositorio repositorio = new ProductoRepositorio();
-    
-    // Contar los productos
-    public Map<String, Integer> contarProductosPorCategoria() {
-        Map<String, Integer> conteo = new HashMap<>();
-        
-        for (Producto producto : repositorio.listar()) {
-            String categoria = producto.getCategoria();
-            
-// guarda la categoria en el mapa, si ya existe el contador aumenta el contador en 1, sino existe empieza desde 0 y suma 1
-            conteo.put(categoria, conteo.getOrDefault(categoria, 0) + 1);
-        }
-        
-        return conteo;
-    }
-    
+ 
     // Registra las acciones realizadas en el sistema.
     private Stack<String> historial = new Stack<>();
     
@@ -171,7 +157,109 @@ public class ProductoNegocio {
         return historial;
     }
     
-    public void registrarExportacion() {
-        historial.push("inventario exportado correctamente.");
+        public void registrarExportacion() {
+        historial.push("Inventario exportado correctamente.");
     }
+    
+        // Contar los productos
+    public Map<String, Integer> contarProductosPorCategoria() {
+        Map<String, Integer> conteo = new HashMap<>();
+        
+        for (Producto producto : repositorio.listar()) {
+            String categoria = producto.getCategoria();
+            
+// guarda la categoria en el mapa, si ya existe el contador aumenta el contador en 1, sino existe empieza desde 0 y suma 1
+            conteo.put(categoria, conteo.getOrDefault(categoria, 0) + 1);
+        }
+        
+        return conteo;
+    }
+    
+    // cantidad total de productos registrados
+    public int obtenerCantidadTotalProductos() {
+        return repositorio.listar().size();
+    }
+    
+    // contar los productos disponibles
+    public int obtenerCantidadProductosDisponibles() {
+        int contador = 0;
+        
+        for (Producto producto : repositorio.listar()) {
+            if (producto.isDisponible()) {
+                contador++;
+            }
+        }
+        
+        return contador;
+    }
+    
+    // contar los productos no disponibles
+    public int obtenerCantidadProductosNoDisponibles() {
+        int contador = 0;
+        
+        for (Producto producto : repositorio.listar()) {
+            if (!producto.isDisponible()) {
+                contador++;
+            }
+        }
+        
+        return contador;
+    }
+    
+    // suma las unidades almacenadas
+    public int obtenerCantidadUnidadesAlmacenadas() {
+        int total = 0;
+        
+        for (Producto producto : repositorio.listar()) {
+            total += producto.getCantidad();
+        }
+        return total;
+    }
+    
+    // Producto con mayor precio
+    public Producto obtenerProductoMayorPrecio() {
+        if (repositorio.listar().isEmpty()) {
+            return null;
+        }
+        
+        Producto mayor = repositorio.listar().get(0);
+        
+        for (Producto producto : repositorio.listar()) {
+            if (producto.getPrecio() > mayor.getPrecio()) {
+                mayor = producto;
+            }
+        }
+        
+        return mayor;
+    }
+    
+    // Producto con menor precio
+    public Producto obtenerProductoMenorPrecio() {
+        if (repositorio.listar().isEmpty()) {
+            return null;
+        }
+        
+        Producto menor = repositorio.listar().get(0);
+        
+        for (Producto producto : repositorio.listar()) {
+            if (producto.getPrecio() < menor.getPrecio()) {
+                menor = producto;
+            }
+        }
+        
+        return menor;
+    }
+    
+    // valor total del inventario
+    public double calcularValorTotalInventario() {
+        double total = 0;
+        
+        for (Producto producto : repositorio.listar()) {
+            total += producto.getCantidad() * producto.getPrecio();
+        }
+        
+        return total;
+    }
+    
+
 }
