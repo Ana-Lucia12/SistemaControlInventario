@@ -72,6 +72,11 @@ public class MainFrame extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tblProductos = new javax.swing.JTable();
         panelEstadisticas = new javax.swing.JPanel();
+        lblTituloEstadisticas = new javax.swing.JLabel();
+        btnActualizarEstadisticas = new javax.swing.JButton();
+        btnVerHistorial = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        txtEstadisticas = new javax.swing.JTextArea();
         jMenuBar2 = new javax.swing.JMenuBar();
         menuArchivo = new javax.swing.JMenu();
         mnuNuevoProducto = new javax.swing.JMenuItem();
@@ -106,6 +111,11 @@ public class MainFrame extends javax.swing.JFrame {
         btnGuardar.setFocusable(false);
         btnGuardar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnGuardar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnGuardar);
 
         btnEditar.setText("Editar");
@@ -418,15 +428,59 @@ public class MainFrame extends javax.swing.JFrame {
 
         TabPrincipal.addTab("Lista de productos", panelLista);
 
+        lblTituloEstadisticas.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblTituloEstadisticas.setText("Estadísticas del inventario");
+
+        btnActualizarEstadisticas.setText("Actualizar estadísticas");
+        btnActualizarEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarEstadisticasActionPerformed(evt);
+            }
+        });
+
+        btnVerHistorial.setText("Ver historial");
+        btnVerHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVerHistorialActionPerformed(evt);
+            }
+        });
+
+        txtEstadisticas.setEditable(false);
+        txtEstadisticas.setColumns(40);
+        txtEstadisticas.setRows(15);
+        jScrollPane3.setViewportView(txtEstadisticas);
+
         javax.swing.GroupLayout panelEstadisticasLayout = new javax.swing.GroupLayout(panelEstadisticas);
         panelEstadisticas.setLayout(panelEstadisticasLayout);
         panelEstadisticasLayout.setHorizontalGroup(
             panelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 702, Short.MAX_VALUE)
+            .addGroup(panelEstadisticasLayout.createSequentialGroup()
+                .addGroup(panelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelEstadisticasLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addGroup(panelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblTituloEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelEstadisticasLayout.createSequentialGroup()
+                                .addComponent(btnActualizarEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnVerHistorial, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelEstadisticasLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 437, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(234, Short.MAX_VALUE))
         );
         panelEstadisticasLayout.setVerticalGroup(
             panelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 484, Short.MAX_VALUE)
+            .addGroup(panelEstadisticasLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(lblTituloEstadisticas, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(panelEstadisticasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnActualizarEstadisticas)
+                    .addComponent(btnVerHistorial))
+                .addGap(33, 33, 33)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 267, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         TabPrincipal.addTab("Estadísticas", panelEstadisticas);
@@ -562,6 +616,63 @@ public class MainFrame extends javax.swing.JFrame {
         );
     }//GEN-LAST:event_mnuAcercaSistemaActionPerformed
 
+    private void mostrarEstadisticas() {
+        Producto mayor = productoNegocio.obtenerProductoMayorPrecio();
+        Producto menor = productoNegocio.obtenerProductoMenorPrecio();
+        
+        String texto = "";
+        
+        texto += "ESTADÍSTICAS DEL INVENTARIO\n";
+        texto += "--------------------------------------\n";
+        
+        texto += "Cantidad total de productos: "
+                + productoNegocio.obtenerCantidadTotalProductos() + "\n";
+        
+        texto += "Cantidad de productos disponibles: "
+                + productoNegocio.obtenerCantidadProductosDisponibles() + "\n";
+
+        texto += "Cantidad de productos no disponibles: "
+                + productoNegocio.obtenerCantidadProductosNoDisponibles() + "\n";
+
+        texto += "Cantidad de unidades almacenadas: "
+                + productoNegocio.obtenerCantidadUnidadesAlmacenadas() + "\n";
+        
+        if (mayor != null) {
+            
+            texto += "Producto con mayor precio: "
+                    + mayor.getNombre() + " - ₡" + mayor.getPrecio() + "\n";
+        } else {
+            texto += "Producto con mayor precio: No hay productos registrados\n";
+        }
+        
+        if (menor != null) {
+            
+            texto += "Producto con menor precio: "
+                    + menor.getNombre() + " - ₡" + menor.getPrecio() + "\n";
+        } else {
+            texto += "Producto con menor precio: No hay productos registrados\n";
+        }
+        
+        texto += "Valor total del inventario: ₡"
+                + productoNegocio.calcularValorTotalInventario() + "\n";
+        
+        texto += "\nCANTIDAD DE PRODUCTOS POR CATEGORÍA\n";
+        texto += "--------------------------------------\n";
+        
+        java.util.Map<String, Integer> conteo = productoNegocio.contarProductosPorCategoria();
+        
+        if (conteo.isEmpty()) {
+            
+            texto += "No hay productos registrados.\n";
+        }  else {
+            for (String categoria : conteo.keySet()) {
+                texto += categoria + ": " + conteo.get(categoria) + "\n";
+            }
+        }
+        
+        txtEstadisticas.setText(texto);
+            
+    }
     private void btnLimpiarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarRegistroActionPerformed
         limpiarCamposRegistro();
     }//GEN-LAST:event_btnLimpiarRegistroActionPerformed
@@ -598,6 +709,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             productoNegocio.agregarProducto(producto);
             cargarTablaProductos(productoNegocio.listarProductos());
+            mostrarEstadisticas();
             
             javax.swing.JOptionPane.showMessageDialog(
                     this,
@@ -657,6 +769,7 @@ public class MainFrame extends javax.swing.JFrame {
             
             productoNegocio.editarProducto(productoEditado);
             cargarTablaProductos(productoNegocio.listarProductos());
+            mostrarEstadisticas();
             
             javax.swing.JOptionPane.showMessageDialog(
                     this,
@@ -766,6 +879,7 @@ public class MainFrame extends javax.swing.JFrame {
                 productoNegocio.eliminarProducto(codigo);
 
                 cargarTablaProductos(productoNegocio.listarProductos());
+                mostrarEstadisticas();
 
                 javax.swing.JOptionPane.showMessageDialog(
                         this,
@@ -821,6 +935,35 @@ public class MainFrame extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnEditarSeleccionadoActionPerformed
 
+    private void btnActualizarEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarEstadisticasActionPerformed
+        mostrarEstadisticas();
+    }//GEN-LAST:event_btnActualizarEstadisticasActionPerformed
+
+    private void btnVerHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVerHistorialActionPerformed
+        
+        String texto = "";
+        
+        if (productoNegocio.obtenerHistorial().isEmpty()) {
+            
+            texto = "No hay acciones registradas en el historial.";
+        } else {
+            for (String accion : productoNegocio.obtenerHistorial()) {
+                texto += accion + "\n";
+            }
+        }
+        
+        javax.swing.JOptionPane.showMessageDialog(
+                this,
+                texto,
+                "Historial de acciones",
+                javax.swing.JOptionPane.INFORMATION_MESSAGE
+        );
+    }//GEN-LAST:event_btnVerHistorialActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -870,6 +1013,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTabbedPane TabPrincipal;
+    private javax.swing.JButton btnActualizarEstadisticas;
     private javax.swing.JButton btnBuscarLista;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEditarRegistro;
@@ -885,6 +1029,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnOrdenar;
     private javax.swing.JButton btnOrdenarLista;
+    private javax.swing.JButton btnVerHistorial;
     private javax.swing.JCheckBox chkDisponible;
     private javax.swing.JComboBox<String> cmbCategoria;
     private javax.swing.JComboBox<String> cmbFiltroCategoria;
@@ -896,6 +1041,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblBuscarLista;
     private javax.swing.JLabel lblCantidad;
     private javax.swing.JLabel lblCategoria;
@@ -907,6 +1053,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel lblOrdenarLista;
     private javax.swing.JLabel lblPrecio;
     private javax.swing.JLabel lblTipoProducto;
+    private javax.swing.JLabel lblTituloEstadisticas;
     private javax.swing.JMenu menuArchivo;
     private javax.swing.JMenu menuAyuda;
     private javax.swing.JMenu menuHerramientas;
@@ -928,6 +1075,7 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JTextField txtCantidad;
     private javax.swing.JTextField txtCodigo;
     private javax.swing.JTextArea txtDescripcion;
+    private javax.swing.JTextArea txtEstadisticas;
     private javax.swing.JTextField txtNombre;
     private javax.swing.JTextField txtPrecio;
     // End of variables declaration//GEN-END:variables
