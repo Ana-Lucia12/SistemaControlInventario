@@ -145,6 +145,22 @@ public class ProductoNegocio {
         repositorio.eliminar(codigo);
         historial.push("Producto eliminado: " + producto.getNombre());
     }
+    
+    // busca un producto por codigo
+    public Producto buscarProductoPorCodigo(String codigo) throws DatoInvalidoException {
+        
+        if (codigo == null || codigo.trim().isEmpty()) {
+            throw new DatoInvalidoException("Debe ingresar el codigo del producto.");
+        }
+        
+        Producto producto = repositorio.buscarPorCodigo(codigo);
+        
+        if (producto == null) {
+            throw new DatoInvalidoException("No existe un producto con ese código.");
+        }
+        
+        return producto;
+    }
     // edita un producto
     public void editarProducto(Producto producto) throws DatoInvalidoException {
         

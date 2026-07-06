@@ -18,7 +18,7 @@ public class Producto {
     
     // Constructor
     public Producto(int id, String codigo, String nombre, String categoria, int cantidad, 
-            double precio, boolean disponible, String tipoproducto, String descripcion) {
+            double precio, boolean disponible, String tipoProducto, String descripcion) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
