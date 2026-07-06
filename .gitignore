@@ -1,3 +1,11 @@
+/build/
+/dist/
+/nbproject/private/
+*.class
+*.jar
+*.log
+
+
 # Compiled class file
 *.class
 
