@@ -5,6 +5,9 @@
 package presentacion;
 
 import modelo.Producto;
+import java.io.File;
+import javax.swing.JFileChooser;
+import util.ArchivoUtil;
 
 public class MainFrame extends javax.swing.JFrame {
     private negocio.ProductoNegocio productoNegocio = new negocio.ProductoNegocio();
@@ -105,6 +108,11 @@ public class MainFrame extends javax.swing.JFrame {
         btnNuevo.setFocusable(false);
         btnNuevo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnNuevo.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnNuevo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevoActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnNuevo);
 
         btnGuardar.setText("Guardar");
@@ -122,24 +130,44 @@ public class MainFrame extends javax.swing.JFrame {
         btnEditar.setFocusable(false);
         btnEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEditarActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnEditar);
 
         btnEliminar.setText("Eliminar");
         btnEliminar.setFocusable(false);
         btnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnEliminar);
 
         btnOrdenar.setText("Ordenar");
         btnOrdenar.setFocusable(false);
         btnOrdenar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnOrdenar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnOrdenar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOrdenarActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnOrdenar);
 
         btnExportar.setText("Exportar");
         btnExportar.setFocusable(false);
         btnExportar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnExportar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        btnExportar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExportarActionPerformed(evt);
+            }
+        });
         toolBarPrincipal.add(btnExportar);
 
         lblCodigo.setText("Código:");
@@ -488,9 +516,19 @@ public class MainFrame extends javax.swing.JFrame {
         menuArchivo.setText("Archivo");
 
         mnuNuevoProducto.setText("Nuevo Producto");
+        mnuNuevoProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuNuevoProductoActionPerformed(evt);
+            }
+        });
         menuArchivo.add(mnuNuevoProducto);
 
         mnuExportarInventario.setText("Exportar inventario");
+        mnuExportarInventario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuExportarInventarioActionPerformed(evt);
+            }
+        });
         menuArchivo.add(mnuExportarInventario);
 
         mnuSalir.setText("Salir");
@@ -506,12 +544,27 @@ public class MainFrame extends javax.swing.JFrame {
         menuHerramientas.setText("Herramientas");
 
         mnuOrdenarProductos.setText("Ordenar productos");
+        mnuOrdenarProductos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuOrdenarProductosActionPerformed(evt);
+            }
+        });
         menuHerramientas.add(mnuOrdenarProductos);
 
         mnuVerEstadisticas.setText("Ver estadísticas");
+        mnuVerEstadisticas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuVerEstadisticasActionPerformed(evt);
+            }
+        });
         menuHerramientas.add(mnuVerEstadisticas);
 
         mnuVerHistorial.setText("Ver historial");
+        mnuVerHistorial.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                mnuVerHistorialActionPerformed(evt);
+            }
+        });
         menuHerramientas.add(mnuVerHistorial);
 
         jMenuBar2.add(menuHerramientas);
@@ -673,6 +726,47 @@ public class MainFrame extends javax.swing.JFrame {
         txtEstadisticas.setText(texto);
             
     }
+    
+    private void exportarInventario() {
+        if (productoNegocio.listarProductos().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                    this,
+                    "No hay productos para exportar."
+            );
+            return;
+        }
+        
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Guardar inventario");
+        
+        int seleccion = fileChooser.showSaveDialog(this);
+        
+        if (seleccion == JFileChooser.APPROVE_OPTION) {
+            File archivo = fileChooser.getSelectedFile();
+            
+            try {
+                ArchivoUtil.exportarInventario(
+                        productoNegocio.listarProductos(),
+                        archivo
+                );
+                
+                 productoNegocio.registrarExportacion();
+                 
+                 javax.swing.JOptionPane.showMessageDialog(
+                         this,
+                         "Inventario exportado correctamente."
+                 );
+                 
+            } catch (excepciones.ArchivoException e) {
+                 javax.swing.JOptionPane.showMessageDialog(
+                         this,
+                         e.getMessage()
+                 );
+            }
+        }
+        
+    }
+            
     private void btnLimpiarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarRegistroActionPerformed
         limpiarCamposRegistro();
     }//GEN-LAST:event_btnLimpiarRegistroActionPerformed
@@ -961,8 +1055,52 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_btnVerHistorialActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        // TODO add your handling code here:
+        btnGuardarRegistro.doClick();
     }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnExportarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportarActionPerformed
+        exportarInventario();
+    }//GEN-LAST:event_btnExportarActionPerformed
+
+    private void mnuExportarInventarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuExportarInventarioActionPerformed
+        exportarInventario();
+    }//GEN-LAST:event_mnuExportarInventarioActionPerformed
+
+    private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+        limpiarCamposRegistro();
+        TabPrincipal.setSelectedIndex(0);
+    }//GEN-LAST:event_btnNuevoActionPerformed
+
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
+        btnEditarRegistro.doClick();
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        TabPrincipal.setSelectedIndex(1);
+        btnEliminarSeleccionado.doClick();
+    }//GEN-LAST:event_btnEliminarActionPerformed
+
+    private void btnOrdenarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOrdenarActionPerformed
+        TabPrincipal.setSelectedIndex(1);
+        btnOrdenarLista.doClick();
+    }//GEN-LAST:event_btnOrdenarActionPerformed
+
+    private void mnuNuevoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuNuevoProductoActionPerformed
+        btnNuevo.doClick();
+    }//GEN-LAST:event_mnuNuevoProductoActionPerformed
+
+    private void mnuOrdenarProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuOrdenarProductosActionPerformed
+        TabPrincipal.setSelectedIndex(1);
+    }//GEN-LAST:event_mnuOrdenarProductosActionPerformed
+
+    private void mnuVerEstadisticasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuVerEstadisticasActionPerformed
+        TabPrincipal.setSelectedIndex(2);
+        mostrarEstadisticas();
+    }//GEN-LAST:event_mnuVerEstadisticasActionPerformed
+
+    private void mnuVerHistorialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnuVerHistorialActionPerformed
+        btnVerHistorial.doClick();
+    }//GEN-LAST:event_mnuVerHistorialActionPerformed
 
     /**
      * @param args the command line arguments
