@@ -69,6 +69,10 @@ public class ProductoNegocio {
         if (producto.getCategoria() == null || producto.getCategoria().trim().isEmpty()) {
             throw new DatoInvalidoException("La categoría es obligatoria.");
         }
+        
+        if (producto.getTipoProducto() == null || producto.getTipoProducto().trim().isEmpty()) {
+            throw new DatoInvalidoException("Debe seleccionar el tipo de producto.");
+        }
     }
     
     // devuelve los productos guardados en el repositorio

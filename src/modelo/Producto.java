@@ -13,11 +13,12 @@ public class Producto {
     private int cantidad;
     private double precio;
     private boolean disponible;
+    private String tipoProducto;
     private String descripcion;
     
     // Constructor
     public Producto(int id, String codigo, String nombre, String categoria, int cantidad, 
-            double precio, boolean disponible, String descripcion) {
+            double precio, boolean disponible, String tipoproducto, String descripcion) {
         this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
@@ -25,6 +26,7 @@ public class Producto {
         this.cantidad = cantidad;
         this.precio = precio;
         this.disponible = disponible;
+        this.tipoProducto = tipoProducto;
         this.descripcion = descripcion;    
     }
     
@@ -85,6 +87,14 @@ public class Producto {
         this.disponible = disponible;
     }
 
+    public String getTipoProducto() {
+        return tipoProducto;
+    }
+
+    public void setTipoProducto(String tipoProducto) {
+        this.tipoProducto = tipoProducto;
+    }
+
     public String getDescripcion() {
         return descripcion;
     }
@@ -103,6 +113,7 @@ public class Producto {
             ", cantidad=" + cantidad +
             ", precio=" + precio +
             ", disponible=" + disponible +
+            ", tipoProducto='" + tipoProducto + '\'' +
             ", descripcion='" + descripcion + '\'' +
             '}';
     }
